@@ -1,0 +1,166 @@
+<!-- paciente_crud.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD Pacientes</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container mt-5">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h2>Gestión de Pacientes</h2>
+        </div>
+        <div class="card-body">
+          <!-- Botón para abrir el formulario de creación -->
+          <div class="d-flex justify-content-end mb-3">
+            <button
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#pacienteModal"
+              id="btn-crear"
+            >
+              <i class="bi bi-person-plus"></i> Crear Paciente
+            </button>
+          </div>
+
+          <!-- Lista de Pacientes -->
+          <h3 class="mb-3">Lista de Pacientes</h3>
+          <ul class="list-group">
+            {% for paciente in pacientes %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+              id="paciente-{{ paciente.pk }}"
+            >
+              <div>
+                <strong>{{ paciente.nombre }}</strong> <br />
+                <span>RUT: {{ paciente.rut }}</span><br />
+                <span>Dirección: {{ paciente.direccion }}</span><br />
+                <span
+                  >Fecha de Nacimiento: {{ paciente.fecha_nacimiento }}</span
+                >
+              </div>
+              <div>
+                <button
+                  class="btn btn-warning btn-sm edit-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#pacienteModal"
+                  data-id="{{ paciente.pk }}"
+                  data-nombre="{{ paciente.nombre }}"
+                  data-rut="{{ paciente.rut }}"
+                  data-direccion="{{ paciente.direccion }}"
+                  data-fecha="{{ paciente.fecha_nacimiento }}"
+                >
+                  Editar
+                </button>
+                <button
+                  class="btn btn-danger btn-sm delete-btn"
+                  data-id="{{ paciente.pk }}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteModal"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Crear/Editar Paciente -->
+    <div
+      class="modal fade"
+      id="pacienteModal"
+      tabindex="-1"
+      aria-labelledby="pacienteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="pacienteModalLabel">Paciente</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="paciente-form" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="id_nombre" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  id="id_nombre"
+                  name="nombre"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="id_rut" class="form-label">RUT</label>
+                <input
+                  type="text"
+                  id="id_rut"
+                  name="rut"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="id_direccion" class="form-label">Dirección</label>
+                <input
+                  type="text"
+                  id="id_direccion"
+                  name="direccion"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="id_fecha_nacimiento" class="form-label"
+                  >Fecha de Nacimiento</label
+                >
+                <input
+                  type="date"
+                  id="id_fecha_nacimiento"
+                  name="fecha_nacimiento"
+                  class="form-control"
+                />
+              </div>
+              <input type="hidden" id="paciente-id" name="id" value="" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              form="paciente-form"
+              id="create-btn"
+            >
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
